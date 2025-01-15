@@ -15,6 +15,8 @@ class JenisBarang extends Model
 
     protected $keyType = 'string';
 
+    public $incrementing = false;
+
     protected $fillable = [
         'kode_jenis_barang',
         'jenis_barang',
