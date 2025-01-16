@@ -13,6 +13,8 @@ class VendorBarang extends Model
     
     protected $keyType = 'string';
 
+    public $incrementing = false;
+
     protected $fillable = [
         'id',
         'nama_vendor',

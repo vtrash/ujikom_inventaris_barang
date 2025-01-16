@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama_barang');
             $table->datetime('tgl_diterima');
             $table->datetime('tgl_entry');
-            $table->enum('kondisi_barang', [1, 2, 3]);
+            $table->enum('kondisi_barang', [1, 2, 3, 4]);
             $table->enum('status_dipinjam', [0, 1]);
             $table->integer('no_entry');
             $table->timestamps();

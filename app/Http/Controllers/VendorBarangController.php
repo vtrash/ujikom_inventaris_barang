@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\GenerateID;
-use App\Models\JenisBarang;
+use App\Models\VendorBarang;
 use Exception;
 use Illuminate\Http\Request;
 
-class JenisBarangController extends Controller
+class VendorBarangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class JenisBarangController extends Controller
 
         $perPage = $validated['per_page'] ?? 10;
 
-        $data = JenisBarang::latest()->paginate($perPage);
+        $data = VendorBarang::latest()->paginate($perPage);
 
         return response()->json(['data' => $data], 200);
     }
@@ -32,13 +32,13 @@ class JenisBarangController extends Controller
     {
         try {
             $validated = $request->validate([
-                'jenis_barang' => ['required', 'string', 'max:255']
+                'nama_vendor' => ['required', 'string', 'max:255']
             ]);
-    
-            $validated['kode_jenis_barang'] = GenerateID::generateId(JenisBarang::class, 'JB', 5, 'kode_jenis_barang');
-            
-            $data = JenisBarang::create($validated);
-            
+
+            $validated['id'] = GenerateID::generateId(VendorBarang::class, 'VB', 5, 'id');
+
+            $data = VendorBarang::create($validated);
+
             return response()->json(['data' => $data], 201);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
@@ -56,23 +56,23 @@ class JenisBarangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, JenisBarang $jenisBarang)
+    public function update(Request $request, VendorBarang $vendorBarang)
     {
         $validated = $request->validate([
-            'jenis_barang' => ['nullable', 'string', 'max:255']
+            'nama_vendor' => ['nullable', 'string', 'max:255']
         ]);
-        
-        $jenisBarang->update($validated);
 
-        return response()->json(['data' => $jenisBarang], 200);
+        $vendorBarang->update($validated);
+
+        return response()->json(['data' => $vendorBarang], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(JenisBarang $jenisBarang)
+    public function destroy(VendorBarang $vendorBarang)
     {
-        $jenisBarang->delete();
+        $vendorBarang->delete();
 
         return response()->json('', 204);
     }

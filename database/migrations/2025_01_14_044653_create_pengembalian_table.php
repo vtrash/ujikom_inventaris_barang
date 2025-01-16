@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('detail_peminjaman_id');
             $table->unsignedBigInteger('user_id');
             $table->string('tgl_kembali');
-            $table->enum('kondisi_barang_kembali', [1, 2, 3]);
+            $table->enum('kondisi_barang_kembali', [1, 2, 3, 4]);
             $table->enum('status_pengembalian', [0, 1]);
             $table->timestamps();
 
