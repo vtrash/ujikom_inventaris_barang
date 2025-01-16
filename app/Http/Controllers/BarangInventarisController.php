@@ -94,4 +94,19 @@ class BarangInventarisController extends Controller
 
         return response()->json('', 204);
     }
+
+    private function generateId()
+    {
+        $latestData = BarangInventaris::orderByDesc('kode_barang')->first();
+
+        $isNewYear = date('Y') > date('Y', strtotime($latestData->tgl_entry));
+
+        $startId = 1;
+
+        if (!$isNewYear) {
+            $startId = $latestData ? (int) substr($latestData['kode_jenis_barang'], 2) + 1 : 1;
+        }
+        
+        return 'INV' . date('Y') . str_pad($startId, 5, 0, STR_PAD_LEFT);
+    }
 }

@@ -24,6 +24,13 @@ class GenerateID
                 ::orderByDesc($id)
                 ->first();
 
+            $prefixes = explode('|', $prefix);
+
+            // if (count($prefixes) > 1) {
+            //     $currentDate = substr($latestData[$id], strlen($prefixes[0]), strlen($prefixes[1]));
+            //     $newDate = date()
+            // }
+
             $startId = $latestData ? (int) substr($latestData[$id], strlen($prefix)) + 1 : 1;
 
             return $prefix . str_pad($startId, $padLength, 0, STR_PAD_LEFT);

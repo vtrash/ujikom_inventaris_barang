@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JenisBarang;
+use App\Helpers\GenerateID;
+use App\Models\Kelas;
 use Exception;
 use Illuminate\Http\Request;
 
-class JenisBarangController extends Controller
+class KelasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +20,7 @@ class JenisBarangController extends Controller
 
         $perPage = $validated['per_page'] ?? 10;
 
-        $data = JenisBarang::latest()->paginate($perPage);
+        $data = Kelas::latest()->paginate($perPage);
 
         return response()->json(['data' => $data], 200);
     }
@@ -31,13 +32,13 @@ class JenisBarangController extends Controller
     {
         try {
             $validated = $request->validate([
-                'jenis_barang' => ['required', 'string', 'max:255']
+                'kelas' => ['required', 'string', 'max:255']
             ]);
-    
-            $validated['kode_jenis_barang'] = $this->generateId();
-            
-            $data = JenisBarang::create($validated);
-            
+
+            $validated['id'] = GenerateID::generateId(Kelas::class, 'K', 5, 'id');
+
+            $data = Kelas::create($validated);
+
             return response()->json(['data' => $data], 201);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
@@ -55,33 +56,24 @@ class JenisBarangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, JenisBarang $jenisBarang)
+    public function update(Request $request, Kelas $kelas)
     {
         $validated = $request->validate([
-            'jenis_barang' => ['nullable', 'string', 'max:255']
+            'kelas' => ['nullable', 'string', 'max:255']
         ]);
-        
-        $jenisBarang->update($validated);
 
-        return response()->json(['data' => $jenisBarang], 200);
+        $kelas->update($validated);
+
+        return response()->json(['data' => $kelas], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(JenisBarang $jenisBarang)
+    public function destroy(Kelas $kelas)
     {
-        $jenisBarang->delete();
+        $kelas->delete();
 
         return response()->json('', 204);
-    }
-
-    private function generateId()
-    {
-        $latestData = JenisBarang::orderByDesc('kode_jenis_barang')->first();
-
-        $startId = $latestData ? (int) substr($latestData['kode_jenis_barang'], 2) + 1 : 1;
-
-        return 'JB' . str_pad($startId, 5, 0, STR_PAD_LEFT);
     }
 }

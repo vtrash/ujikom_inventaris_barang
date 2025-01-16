@@ -1,11 +1,11 @@
 <?php
 
-use App\Helpers\GenerateID;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangInventarisController;
 use App\Http\Controllers\JenisBarangController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\VendorBarangController;
-use App\Models\JenisBarang;
+use App\Models\BarangInventaris;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -38,6 +38,24 @@ Route::group([
         Route::delete('/{barangInventaris}', [BarangInventarisController::class, 'destroy']);
     });
 
+    Route::group(['prefix' => 'kelas'], function () {
+        Route::get('/', [KelasController::class, 'index']);
+        Route::post('/', [KelasController::class, 'store']);
+        Route::put('/{kelas}', [KelasController::class, 'update']);
+        Route::delete('/{kelas}', [KelasController::class, 'destroy']);
+    });
 });
 
-Route::post('test', fn() => GenerateID::generateId(JenisBarang::class, 'JB', 5, 'kode_jenis_barang'));
+Route::post('test', function() {
+    $latestData = BarangInventaris::orderByDesc('kode_barang')->first();
+
+    $isNewYear = date('Y') > date('Y', strtotime($latestData->tgl_entry));
+
+    $startId = 1;
+
+    if (!$isNewYear) {
+        $startId = $latestData ? (int) substr($latestData['kode_jenis_barang'], 2) + 1 : 1;
+    }
+    
+    return 'INV' . date('Y') . str_pad($startId, 5, 0, STR_PAD_LEFT);
+});
