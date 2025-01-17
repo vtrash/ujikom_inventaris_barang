@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\JenisBarang;
-use Exception;
 use Illuminate\Http\Request;
 
 class JenisBarangController extends Controller
@@ -29,19 +28,15 @@ class JenisBarangController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'jenis_barang' => ['required', 'string', 'max:255']
-            ]);
-    
-            $validated['kode_jenis_barang'] = $this->generateId();
-            
-            $data = JenisBarang::create($validated);
-            
-            return response()->json(['data' => $data], 201);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
-        }
+        $validated = $request->validate([
+            'jenis_barang' => ['required', 'string', 'max:255']
+        ]);
+
+        $validated['kode_jenis_barang'] = $this->generateId();
+
+        $data = JenisBarang::create($validated);
+
+        return response()->json(['data' => $data], 201);
     }
 
     /**
@@ -58,9 +53,9 @@ class JenisBarangController extends Controller
     public function update(Request $request, JenisBarang $jenisBarang)
     {
         $validated = $request->validate([
-            'jenis_barang' => ['nullable', 'string', 'max:255']
+            'jenis_barang' => ['sometimes', 'string', 'max:255']
         ]);
-        
+
         $jenisBarang->update($validated);
 
         return response()->json(['data' => $jenisBarang], 200);
@@ -74,14 +69,5 @@ class JenisBarangController extends Controller
         $jenisBarang->delete();
 
         return response()->json('', 204);
-    }
-
-    private function generateId()
-    {
-        $latestData = JenisBarang::orderByDesc('kode_jenis_barang')->first();
-
-        $startId = $latestData ? (int) substr($latestData['kode_jenis_barang'], 2) + 1 : 1;
-
-        return 'JB' . str_pad($startId, 5, 0, STR_PAD_LEFT);
     }
 }

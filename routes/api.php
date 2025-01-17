@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangInventarisController;
+use App\Http\Controllers\BatchBarangController;
 use App\Http\Controllers\JenisBarangController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\VendorBarangController;
 use App\Models\BarangInventaris;
+use App\Models\DetailPeminjaman;
+use App\Models\Peminjaman;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -23,12 +27,19 @@ Route::group([
         Route::put('/{jenisBarang}', [JenisBarangController::class, 'update']);
         Route::delete('/{jenisBarang}', [JenisBarangController::class, 'destroy']);
     });
-    
+
     Route::group(['prefix' => 'vendor-barang'], function () {
         Route::get('/', [VendorBarangController::class, 'index']);
         Route::post('/', [VendorBarangController::class, 'store']);
         Route::put('/{vendorBarang}', [VendorBarangController::class, 'update']);
         Route::delete('/{vendorBarang}', [VendorBarangController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'batch-barang'], function () {
+        Route::get('/', [BatchBarangController::class, 'index']);
+        Route::post('/', [BatchBarangController::class, 'store']);
+        Route::put('/{batchBarang}', [BatchBarangController::class, 'update']);
+        Route::delete('/{batchBarang}', [BatchBarangController::class, 'destroy']);
     });
 
     Route::group(['prefix' => 'barang-inventaris'], function () {
@@ -46,16 +57,8 @@ Route::group([
     });
 });
 
-Route::post('test', function() {
-    $latestData = BarangInventaris::orderByDesc('kode_barang')->first();
+Route::post('test', function () {
+    $latestData = 'KB202506001';
 
-    $isNewYear = date('Y') > date('Y', strtotime($latestData->tgl_entry));
-
-    $startId = 1;
-
-    if (!$isNewYear) {
-        $startId = $latestData ? (int) substr($latestData['kode_jenis_barang'], 2) + 1 : 1;
-    }
-    
-    return 'INV' . date('Y') . str_pad($startId, 5, 0, STR_PAD_LEFT);
+    return date('Y-m', strtotime(substr($latestData, 2, 6) . '01'));
 });

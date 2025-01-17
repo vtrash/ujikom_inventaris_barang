@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\GenerateID;
-use App\Models\VendorBarang;
-use Exception;
+use App\Models\BatchBarang;
 use Illuminate\Http\Request;
 
-class VendorBarangController extends Controller
+class BatchBarangController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +18,7 @@ class VendorBarangController extends Controller
 
         $perPage = $validated['per_page'] ?? 10;
 
-        $data = VendorBarang::latest()->paginate($perPage);
+        $data = BatchBarang::latest()->paginate($perPage);
 
         return response()->json(['data' => $data], 200);
     }
@@ -31,14 +29,16 @@ class VendorBarangController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_vendor' => ['required', 'string', 'max:255']
+            'vendor_id' => ['required', 'exists:vendor,id'],
+            'tgl_diterima' => ['required', 'date'],
+            'keterangan' => ['required', 'string', 'max:255']
         ]);
-
-        $data = VendorBarang::create($validated);
-
+        
+        $data = BatchBarang::create($validated);
+        
         return response()->json(['data' => $data], 201);
     }
-
+    
     /**
      * Display the specified resource.
      */
@@ -46,27 +46,29 @@ class VendorBarangController extends Controller
     {
         //
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, VendorBarang $vendorBarang)
+    public function update(Request $request, BatchBarang $batchBarang)
     {
         $validated = $request->validate([
-            'nama_vendor' => ['sometimes', 'string', 'max:255']
+            'vendor_id' => ['sometimes', 'exists:vendor,id'],
+            'tgl_diterima' => ['sometimes', 'date'],
+            'keterangan' => ['sometimes', 'string', 'max:255']
         ]);
 
-        $vendorBarang->update($validated);
+        $batchBarang->update($validated);
 
-        return response()->json(['data' => $vendorBarang], 200);
+        return response()->json(['data' => $batchBarang], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(VendorBarang $vendorBarang)
+    public function destroy(BatchBarang $batchBarang)
     {
-        $vendorBarang->delete();
+        $batchBarang->delete();
 
         return response()->json('', 204);
     }

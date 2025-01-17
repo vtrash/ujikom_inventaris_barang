@@ -13,7 +13,7 @@ class Pengembalian extends Model
     
     protected $keyType = 'string';
 
-    protected $incrementing = false;
+    public $incrementing = false;
 
     protected $fillable = [
         'id',
@@ -32,5 +32,21 @@ class Pengembalian extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public static function generateId()
+    {
+        $startId = 1;
+        $latestData = Pengembalian::orderByDesc('id')->first();
+
+        if ($latestData) {
+            $isNewDate = date('Y-m') > date('Y-m', strtotime(substr($latestData['id'], 2, 6) . '01'));
+    
+            if (!$isNewDate) {
+                $startId = (int) substr($latestData['id'], strlen('KBYYYYmm')) + 1;
+            }
+        }
+        
+        return 'KB' . date('Y') . date('m') . str_pad($startId, 5, 0, STR_PAD_LEFT);
     }
 }

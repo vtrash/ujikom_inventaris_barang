@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('peminjaman', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('nis_siswa');
+            $table->string('nis_siswa');
             $table->datetime('tgl_peminjaman')->useCurrent();
             $table->datetime('tgl_pengembalian');
             $table->enum('status_pengembalian', [0, 1])->default(0);

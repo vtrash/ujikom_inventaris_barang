@@ -48,4 +48,20 @@ class BarangInventaris extends Model
     {
         return $this->hasMany(DetailPeminjaman::class, 'kode_barang', 'kode_barang');
     }
+    
+    public static function generateId()
+    {
+        $startId = 1;
+        $latestData = BarangInventaris::orderByDesc('kode_barang')->first();
+
+        if ($latestData) {
+            $isNewDate = date('Y') > date('Y', strtotime($latestData->tgl_entry));
+    
+            if (!$isNewDate) {
+                $startId = (int) substr($latestData['kode_barang'], 7) + 1;
+            }
+        }
+        
+        return 'INV' . date('Y') . str_pad($startId, 5, 0, STR_PAD_LEFT);
+    }
 }

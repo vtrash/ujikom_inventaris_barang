@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('batch_barang', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('vendor_id');
+            $table->unsignedBigInteger('vendor_id')->nullable();
             $table->datetime('tgl_diterima');
             $table->string('keterangan');
             $table->timestamps();

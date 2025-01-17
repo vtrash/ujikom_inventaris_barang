@@ -13,7 +13,7 @@ class Peminjaman extends Model
 
     protected $keyType = 'string';
 
-    protected $incrementing = 'false';
+    public $incrementing = false;
 
     protected $fillable = [
         'id',
@@ -36,6 +36,22 @@ class Peminjaman extends Model
 
     public function detail_peminjaman()
     {
-        return $this->hasMany(DetailPeminjaman::class, 'peminjaman_id');
+        return $this->hasMany(DetailPeminjaman::class, 'peminjaman_id', 'id');
+    }
+
+    public static function generateId()
+    {
+        $startId = 1;
+        $latestData = Peminjaman::orderByDesc('id')->first();
+
+        if ($latestData) {
+            $isNewDate = date('Y-m') > date('Y-m', strtotime($latestData->tgl_peminjaman));
+    
+            if (!$isNewDate) {
+                $startId = (int) substr($latestData['id'], 8) + 1;
+            }
+        }
+        
+        return 'PJ' . date('Y') . date('m') . str_pad($startId, 5, 0, STR_PAD_LEFT);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('kelas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('jurusan_id');
-            $table->string('no_konsentrasi')->unique();
+            $table->string('no_konsentrasi');
             $table->integer('tingkatan');
             $table->timestamps();
 
