@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->timestamps();
 
             $table->foreign('peminjaman_id')->references('id')->on('peminjaman')->restrictOnDelete();
+            $table->foreign('kode_barang')->references('kode_barang')->on('barang_inventaris')->restrictOnDelete();
+
         });
     }
 

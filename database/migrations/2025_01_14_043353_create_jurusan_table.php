@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelas', function (Blueprint $table) {
+        Schema::create('jurusan', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('jurusan_id');
-            $table->string('no_konsentrasi')->unique();
-            $table->integer('tingkatan');
+            $table->string('jurusan')->unique();
             $table->timestamps();
-
-            $table->foreign('jurusan_id')->references('id')->on('jurusan')->restrictOnDelete();
         });
     }
 
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelas');
+        Schema::dropIfExists('jurusan');
     }
 };

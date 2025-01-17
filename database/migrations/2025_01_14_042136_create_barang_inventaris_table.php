@@ -14,19 +14,18 @@ return new class extends Migration
         Schema::create('barang_inventaris', function (Blueprint $table) {
             $table->string('kode_barang')->primary();
             $table->string('kode_jenis_barang');
+            $table->unsignedBigInteger('batch_barang_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('vendor_id');
             $table->string('nama_barang');
-            $table->datetime('tgl_diterima');
-            $table->datetime('tgl_entry');
-            $table->enum('kondisi_barang', [1, 2, 3, 4]);
-            $table->enum('status_dipinjam', [0, 1]);
-            $table->integer('no_entry');
+            $table->datetime('tgl_entry')->useCurrent();
+            $table->enum('kondisi_barang', [1, 2, 3, 4])->default(1);
+            $table->enum('status_dipinjam', [0, 1])->default(0);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('kode_jenis_barang')->references('kode_jenis_barang')->on('jenis_barang')->restrictOnDelete();
+            $table->foreign('batch_barang_id')->references('id')->on('batch_barang')->restrictOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->restrictOnDelete();
-            $table->foreign('vendor_id')->references('id')->on('vendor_barang')->restrictOnDelete();
         });
     }
 

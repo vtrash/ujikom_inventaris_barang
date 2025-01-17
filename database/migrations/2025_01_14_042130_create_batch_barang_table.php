@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jurusan', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('jurusan')->unique();
+        Schema::create('batch_barang', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('vendor_id');
+            $table->datetime('tgl_diterima');
+            $table->string('keterangan');
             $table->timestamps();
+
+            $table->foreign('vendor_id')->references('id')->on('vendor_barang')->restrictOnDelete();
         });
     }
 
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jurusan');
+        Schema::dropIfExists('batch_barang');
     }
 };

@@ -104,8 +104,10 @@ class BarangInventarisController extends Controller
         $startId = 1;
 
         if (!$isNewYear) {
-            $startId = $latestData ? (int) substr($latestData['kode_jenis_barang'], 2) + 1 : 1;
+            $startId = $latestData ? (int) substr($latestData['kode_barang'], 7) + 1 : 1;
         }
+
+        00001;
         
         return 'INV' . date('Y') . str_pad($startId, 5, 0, STR_PAD_LEFT);
     }

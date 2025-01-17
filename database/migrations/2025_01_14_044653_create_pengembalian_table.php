@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('pengembalian', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('detail_peminjaman_id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('tgl_kembali');
-            $table->enum('kondisi_barang_kembali', [1, 2, 3, 4]);
-            $table->enum('status_pengembalian', [0, 1]);
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('tgl_kembali')->nullable();
+            $table->enum('kondisi_barang_kembali', [1, 2, 3, 4])->nullable();
+            $table->enum('status_pengembalian', [0, 1])->default(0);
             $table->timestamps();
 
             $table->foreign('detail_peminjaman_id')->references('id')->on('detail_peminjaman')->restrictOnDelete();
