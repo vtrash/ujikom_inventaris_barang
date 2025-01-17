@@ -13,6 +13,8 @@ class Pengembalian extends Model
     
     protected $keyType = 'string';
 
+    protected $incrementing = false;
+
     protected $fillable = [
         'id',
         'detail_peminjaman_id',
@@ -24,11 +26,11 @@ class Pengembalian extends Model
 
     public function detail_peminjaman()
     {
-        return $this->belongsTo(DetailPeminjaman::class, 'detail_peminjaman_id');
+        return $this->belongsTo(DetailPeminjaman::class, 'detail_peminjaman_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

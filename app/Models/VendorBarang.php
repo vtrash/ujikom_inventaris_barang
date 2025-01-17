@@ -11,17 +11,12 @@ class VendorBarang extends Model
     
     protected $table = 'vendor_barang';
     
-    protected $keyType = 'string';
-
-    public $incrementing = false;
-
     protected $fillable = [
-        'id',
         'nama_vendor',
     ];
 
-    public function barang_inventaris()
+    public function batch_barang()
     {
-        return $this->hasMany(BarangInventaris::class, 'vendor_id');
+        return $this->hasMany(BatchBarang::class, 'vendor_id', 'id');
     }
 }

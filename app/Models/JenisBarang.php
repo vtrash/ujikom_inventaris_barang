@@ -24,6 +24,6 @@ class JenisBarang extends Model
 
     public function barang_inventaris()
     {
-        return $this->hasMany(BarangInventaris::class, 'kode_barang');
+        return $this->hasMany(BarangInventaris::class, 'kode_jenis_barang', 'kode_jenis_barang');
     }
 }

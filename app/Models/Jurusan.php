@@ -10,16 +10,14 @@ class Jurusan extends Model
     use HasFactory;
     
     protected $table = 'jurusan';
-    
-    protected $keyType = 'string';
 
     protected $fillable = [
         'id',
-        'nama_kelas',
+        'jurusan',
     ];
 
-    public function siswa()
+    public function kelas()
     {
-        return $this->hasMany(Siswa::class, 'jurusan_id');
+        return $this->hasMany(Kelas::class, 'jurusan_id', 'id');
     }
 }

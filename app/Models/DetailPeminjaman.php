@@ -13,6 +13,8 @@ class DetailPeminjaman extends Model
     
     protected $keyType = 'string';
 
+    protected $incrementing = false;
+
     protected $fillable = [
         'id',
         'peminjaman_id',
@@ -21,7 +23,7 @@ class DetailPeminjaman extends Model
 
     public function peminjaman()
     {
-        return $this->belongsTo(Peminjaman::class, 'peminjaman_id');
+        return $this->belongsTo(Peminjaman::class, 'peminjaman_id', 'id');
     }
 
     public function barang_inventaris()
@@ -31,6 +33,6 @@ class DetailPeminjaman extends Model
 
     public function pengembalian()
     {
-        return $this->hasOne(Pengembalian::class, 'detail_peminjaman_id');
+        return $this->hasOne(Pengembalian::class, 'detail_peminjaman_id', 'id');
     }
 }

@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Peminjaman extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'peminjaman';
-    
+
     protected $keyType = 'string';
+
+    protected $incrementing = 'false';
 
     protected $fillable = [
         'id',
         'user_id',
-        'siswa_id',
+        'nis_siswa',
         'tgl_peminjaman',
         'tgl_pengembalian',
         'status_pengembalian',
@@ -24,12 +26,12 @@ class Peminjaman extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id');
+        return $this->belongsTo(Siswa::class, 'nis_siswa', 'nis');
     }
 
     public function detail_peminjaman()

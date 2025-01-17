@@ -74,16 +74,16 @@ class User extends Authenticatable implements JWTSubject
 
     public function barang_inventaris()
     {
-        return $this->hasMany(BarangInventaris::class, 'user_id');
+        return $this->hasMany(BarangInventaris::class, 'user_id', 'id');
     }
 
     public function peminjaman()
     {
-        return $this->hasMany(Peminjaman::class, 'user_id');
+        return $this->hasMany(Peminjaman::class, 'user_id', 'id');
     }
 
     public function pengembalian()
     {
-        return $this->hasMany(Pengembalian::class, 'user_id');
+        return $this->hasMany(Pengembalian::class, 'user_id', 'id');
     }
 }

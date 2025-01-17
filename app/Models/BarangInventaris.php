@@ -21,33 +21,31 @@ class BarangInventaris extends Model
     protected $fillable = [
         'kode_barang',
         'kode_jenis_barang',
+        'batch_barang_id',
         'user_id',
-        'vendor_id',
         'nama_barang',
-        'tgl_diterima',
         'tgl_entry',
         'kondisi_barang',
         'status_dipinjam',
-        'no_entry',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function jenis_barang()
     {
-        return $this->belongsTo(JenisBarang::class, 'kode_jenis_barang');
+        return $this->belongsTo(JenisBarang::class, 'kode_jenis_barang', 'kode_jenis_barang');
     }
 
-    public function vendor_barang()
+    public function batch_barang()
     {
-        return $this->belongsTo(VendorBarang::class, 'vendor_id');
+        return $this->belongsTo(BatchBarang::class, 'batch_barang_id', 'id');
     }
 
     public function detail_peminjaman()
     {
-        return $this->hasMany(DetailPeminjaman::class, 'kode_barang');
+        return $this->hasMany(DetailPeminjaman::class, 'kode_barang', 'kode_barang');
     }
 }

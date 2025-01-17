@@ -11,29 +11,22 @@ class Siswa extends Model
     
     protected $table = 'siswa';
     
-    protected $keyType = 'string';
+    protected $incrementing = false;
 
     protected $fillable = [
-        'id',
-        'kelas_id',
-        'jurusan_id',
-        'nama_siswa',
         'nis',
+        'kelas_id',
+        'nama_siswa',
         'no_hp',
     ];
 
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class, 'kelas_id');
-    }
-
-    public function jurusan()
-    {
-        return $this->belongsTo(Jurusan::class, 'jurusan_id');
+        return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
     }
 
     public function peminjaman()
     {
-        return $this->hasMany(Peminjaman::class, 'siswa_id');
+        return $this->hasMany(Peminjaman::class, 'nis_siswa', 'nis');
     }
 }
