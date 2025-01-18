@@ -32,7 +32,7 @@ class JenisBarangController extends Controller
             'jenis_barang' => ['required', 'string', 'max:255']
         ]);
 
-        $validated['kode_jenis_barang'] = $this->generateId();
+        $validated['kode_jenis_barang'] = JenisBarang::generateId();;
 
         $data = JenisBarang::create($validated);
 

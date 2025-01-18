@@ -29,7 +29,7 @@ class BatchBarangController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'vendor_id' => ['required', 'exists:vendor,id'],
+            'vendor_id' => ['required', 'exists:vendor_barang,id'],
             'tgl_diterima' => ['required', 'date'],
             'keterangan' => ['required', 'string', 'max:255']
         ]);
@@ -53,7 +53,7 @@ class BatchBarangController extends Controller
     public function update(Request $request, BatchBarang $batchBarang)
     {
         $validated = $request->validate([
-            'vendor_id' => ['sometimes', 'exists:vendor,id'],
+            'vendor_id' => ['sometimes', 'exists:vendor_barang,id'],
             'tgl_diterima' => ['sometimes', 'date'],
             'keterangan' => ['sometimes', 'string', 'max:255']
         ]);

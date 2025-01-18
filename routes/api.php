@@ -44,6 +44,7 @@ Route::group([
 
     Route::group(['prefix' => 'barang-inventaris'], function () {
         Route::get('/', [BarangInventarisController::class, 'index']);
+        Route::get('/{barangInventaris}', [BarangInventarisController::class, 'show']);
         Route::post('/', [BarangInventarisController::class, 'store']);
         Route::put('/{barangInventaris}', [BarangInventarisController::class, 'update']);
         Route::delete('/{barangInventaris}', [BarangInventarisController::class, 'destroy']);

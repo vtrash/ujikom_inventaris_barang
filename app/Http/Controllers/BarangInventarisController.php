@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\GenerateID;
 use App\Models\BarangInventaris;
 use Auth;
-use Exception;
 use Illuminate\Http\Request;
 
 class BarangInventarisController extends Controller
@@ -31,37 +29,31 @@ class BarangInventarisController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $user = Auth::user();
+        $user = Auth::user();
 
-            $validated = $request->validate([
-                'kode_jenis_barang' => ['required', 'exists:jenis_barang,kode_jenis_barang'],
-                'vendor_id' => ['required', 'exists:vendor_barang,id'],
-                'nama_barang' => ['required', 'string', 'max:255'],
-                'tgl_diterima' => ['required', 'date'],
-                'tgl_entry' => ['required', 'date'],
-                'kondisi_barang' => ['required', 'in:1,2,3,4'],
-                'no_entry' => ['required', 'integer'],
-            ]);
+        $validated = $request->validate([
+            'kode_jenis_barang' => ['required', 'exists:jenis_barang,kode_jenis_barang'],
+            'batch_barang_id' => ['required', 'exists:batch_barang,id'],
+            'nama_barang' => ['required', 'string', 'max:255'],
+            'tgl_entry' => ['required', 'date'],
+            'kondisi_barang' => ['required', 'in:1,2,3,4'],
+        ]);
 
-            $validated['kode_barang'] = GenerateID::generateId(BarangInventaris::class, 'INV' . date('Y') . date('m'), 5, 'kode_barang');
-            $validated['status_dipinjam'] = '0';
-            $validated['user_id'] = $user->id;
+        $validated['kode_barang'] = BarangInventaris::generateId();
+        $validated['user_id'] = $user->id;
+        $validated['status_dipinjam'] = '0';
 
-            $data = BarangInventaris::create($validated);
+        $data = BarangInventaris::create($validated);
 
-            return response()->json(['data' => $data], 201);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
-        }
+        return response()->json(['data' => $data], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(BarangInventaris $barangInventaris)
     {
-        //
+        return response()->json(['data' => $barangInventaris], 200);
     }
 
     /**
@@ -70,14 +62,11 @@ class BarangInventarisController extends Controller
     public function update(Request $request, BarangInventaris $barangInventaris)
     {
         $validated = $request->validate([
-            'kode_jenis_barang' => ['nullable', 'exists:jenis_barang,kode_jenis_barang'],
-            'vendor_id' => ['nullable', 'exists:vendor_barang,id'],
-            'nama_barang' => ['nullable', 'string', 'max:255'],
-            'tgl_diterima' => ['nullable', 'date'],
-            'tgl_entry' => ['nullable', 'date'],
-            'kondisi_barang' => ['nullable', 'in:1,2,3,4'],
-            'status_dipinjam' => ['nullable', 'in:0,1'],
-            'no_entry' => ['nullable', 'integer'],
+            'kode_jenis_barang' => ['sometimes', 'exists:jenis_barang,kode_jenis_barang'],
+            'batch_barang_id' => ['sometimes', 'exists:batch_barang,id'],
+            'nama_barang' => ['sometimes', 'string', 'max:255'],
+            'kondisi_barang' => ['sometimes', 'in:1,2,3,4'],
+            'status_dipinjam' => ['sometimes', 'in:0,1'],
         ]);
 
         $barangInventaris->update($validated);
@@ -90,8 +79,19 @@ class BarangInventarisController extends Controller
      */
     public function destroy(BarangInventaris $barangInventaris)
     {
-        $barangInventaris->delete();
+        if (empty($barangInventaris->detail_peminjaman)) {
+            $barangInventaris->forceDelete();
+            return response()->json('', 204);
+        }
 
+        $isBorrowed = $barangInventaris->detail_peminjaman
+            ->contains(fn ($detail_peminjaman) => !$detail_peminjaman->status_pengembalian);
+
+        if ($isBorrowed) {
+            return response()->json(['error' => 'Barang masih dipinjam.'], 409);
+        }
+
+        $barangInventaris->delete();
         return response()->json('', 204);
     }
 }
