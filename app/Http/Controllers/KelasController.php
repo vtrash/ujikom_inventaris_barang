@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\GenerateID;
 use App\Models\Kelas;
 use Exception;
 use Illuminate\Http\Request;
@@ -32,10 +31,10 @@ class KelasController extends Controller
     {
         try {
             $validated = $request->validate([
-                'kelas' => ['required', 'string', 'max:255']
+                'jurusan_id' => ['required', 'exists:jurusan,id'],
+                'no_konsentrasi' => ['required', 'string', 'max:255'],
+                'tingkatan' => ['required', 'integer', 'min:10', 'max:12']
             ]);
-
-            $validated['id'] = GenerateID::generateId(Kelas::class, 'K', 5, 'id');
 
             $data = Kelas::create($validated);
 
@@ -59,7 +58,9 @@ class KelasController extends Controller
     public function update(Request $request, Kelas $kelas)
     {
         $validated = $request->validate([
-            'kelas' => ['nullable', 'string', 'max:255']
+            'jurusan_id' => ['sometimes', 'exists:jurusan,id'],
+            'no_konsentrasi' => ['sometimes', 'string', 'max:255'],
+            'tingkatan' => ['sometimes', 'integer', 'min:10', 'max:12']
         ]);
 
         $kelas->update($validated);

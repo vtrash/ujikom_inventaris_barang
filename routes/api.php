@@ -4,7 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangInventarisController;
 use App\Http\Controllers\BatchBarangController;
 use App\Http\Controllers\JenisBarangController;
+use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\VendorBarangController;
 use App\Models\BarangInventaris;
 use App\Models\DetailPeminjaman;
@@ -49,12 +51,27 @@ Route::group([
         Route::put('/{barangInventaris}', [BarangInventarisController::class, 'update']);
         Route::delete('/{barangInventaris}', [BarangInventarisController::class, 'destroy']);
     });
-
+    
+    Route::group(['prefix' => 'jurusan'], function () {
+        Route::get('/', [JurusanController::class, 'index']);
+        Route::post('/', [JurusanController::class, 'store']);
+        Route::put('/{jurusan}', [JurusanController::class, 'update']);
+        Route::delete('/{jurusan}', [JurusanController::class, 'destroy']);
+    });
+    
     Route::group(['prefix' => 'kelas'], function () {
         Route::get('/', [KelasController::class, 'index']);
         Route::post('/', [KelasController::class, 'store']);
         Route::put('/{kelas}', [KelasController::class, 'update']);
         Route::delete('/{kelas}', [KelasController::class, 'destroy']);
+    });
+    
+    Route::group(['prefix' => 'siswa'], function () {
+        Route::get('/', [SiswaController::class, 'index']);
+        Route::get('/{siswa}', [SiswaController::class, 'show']);
+        Route::post('/', [SiswaController::class, 'store']);
+        Route::put('/{siswa}', [SiswaController::class, 'update']);
+        Route::delete('/{siswa}', [SiswaController::class, 'destroy']);
     });
 });
 

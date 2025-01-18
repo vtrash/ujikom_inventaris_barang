@@ -13,7 +13,7 @@ class Jurusan extends Model
 
     protected $fillable = [
         'id',
-        'jurusan',
+        'nama_jurusan',
     ];
 
     public function kelas()

@@ -29,7 +29,7 @@ class KelasSeeder extends Seeder
         ];
 
         foreach ($konsentrasis as $konsentrasi => $konsentrasiPerKelas) {
-            $jurusanId = Jurusan::where('jurusan', $konsentrasi)->first()->id;
+            $jurusanId = Jurusan::where('nama_jurusan', $konsentrasi)->first()->id;
 
             foreach ($konsentrasiPerKelas as $tingkatan => $noKonsentrasis) {
                 foreach ($noKonsentrasis as $noKonsentrasi) {
