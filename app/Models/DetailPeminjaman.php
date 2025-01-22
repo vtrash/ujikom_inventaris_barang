@@ -37,19 +37,25 @@ class DetailPeminjaman extends Model
         return $this->hasOne(Pengembalian::class, 'detail_peminjaman_id', 'id');
     }
 
-    public static function generateId(string $peminjamanId)
+    public static function generateId(string $peminjamanId, int $itemLength)
     {
         $startId = 1;
 
         $latestData = DetailPeminjaman
             ::where('peminjaman_id', $peminjamanId)
             ->orderByDesc('peminjaman_id')
+            ->lockForUpdate()
             ->first();
 
         if ($latestData) {
             $startId = (int) substr($latestData['id'], strlen($peminjamanId)) + 1;
         }
 
-        return $peminjamanId . str_pad($startId, 3, 0, STR_PAD_LEFT);
+        for ($i = 0; $i < $itemLength; $i++) {
+            $generatedIds[] = $peminjamanId . str_pad($startId + $i, 3, 0, STR_PAD_LEFT);
+        }
+
+        return $generatedIds;
+
     }
 }

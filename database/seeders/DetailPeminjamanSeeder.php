@@ -28,12 +28,13 @@ class DetailPeminjamanSeeder extends Seeder
             ->pluck('kode_barang');
 
         foreach ($peminjamanIds as $i => $peminjamanId) {
+            $detailPeminjamanIds = DetailPeminjaman::generateId($peminjamanId, 2);
             for ($j = 0; $j < 2; $j++) {
 
                 DB::beginTransaction();
 
                 DetailPeminjaman::create([
-                    'id' => DetailPeminjaman::generateId($peminjamanId),
+                    'id' => $detailPeminjamanIds[$j],
                     'peminjaman_id' => $peminjamanId,
                     'kode_barang' => $barangIds[$i * 2 + $j],
                 ]);

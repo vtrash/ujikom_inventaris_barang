@@ -6,12 +6,11 @@ use App\Http\Controllers\BatchBarangController;
 use App\Http\Controllers\JenisBarangController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PengembalianController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\VendorBarangController;
-use App\Models\BarangInventaris;
-use App\Models\DetailPeminjaman;
-use App\Models\Peminjaman;
-use App\Models\User;
+use App\Models\Pengembalian;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -73,10 +72,22 @@ Route::group([
         Route::put('/{siswa}', [SiswaController::class, 'update']);
         Route::delete('/{siswa}', [SiswaController::class, 'destroy']);
     });
+    
+    Route::group(['prefix' => 'peminjaman'], function () {
+        Route::get('/', [PeminjamanController::class, 'index']);
+        Route::get('/{peminjaman}', [PeminjamanController::class, 'show']);
+        Route::post('/', [PeminjamanController::class, 'store']);
+        // Route::put('/{siswa}', [PeminjamanController::class, 'update']);
+        // Route::delete('/{siswa}', [PeminjamanController::class, 'destroy']);
+    });
+
+    Route::group(['prefix' => 'pengembalian'], function () {
+        Route::put('/{pengembalian}', [PengembalianController::class, 'update']);
+    });
 });
 
 Route::post('test', function () {
-    $latestData = 'KB202506001';
+    $data = Pengembalian::generateId(10);
 
-    return date('Y-m', strtotime(substr($latestData, 2, 6) . '01'));
+    return $data;
 });

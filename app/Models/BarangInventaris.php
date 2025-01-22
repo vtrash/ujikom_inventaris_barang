@@ -52,7 +52,10 @@ class BarangInventaris extends Model
     public static function generateId()
     {
         $startId = 1;
-        $latestData = BarangInventaris::orderByDesc('kode_barang')->first();
+        $latestData = BarangInventaris
+            ::orderByDesc('kode_barang')
+            ->lockForUpdate()
+            ->first();
 
         if ($latestData) {
             $isNewDate = date('Y') > date('Y', strtotime($latestData->tgl_entry));

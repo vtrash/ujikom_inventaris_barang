@@ -29,8 +29,6 @@ class BarangInventarisController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Auth::user();
-
         $validated = $request->validate([
             'kode_jenis_barang' => ['required', 'exists:jenis_barang,kode_jenis_barang'],
             'batch_barang_id' => ['required', 'exists:batch_barang,id'],
@@ -40,7 +38,7 @@ class BarangInventarisController extends Controller
         ]);
 
         $validated['kode_barang'] = BarangInventaris::generateId();
-        $validated['user_id'] = $user->id;
+        $validated['user_id'] = Auth::user()->id;
         $validated['status_dipinjam'] = '0';
 
         $data = BarangInventaris::create($validated);
@@ -84,10 +82,7 @@ class BarangInventarisController extends Controller
             return response()->json('', 204);
         }
 
-        $isBorrowed = $barangInventaris->detail_peminjaman
-            ->contains(fn ($detail_peminjaman) => !$detail_peminjaman->status_pengembalian);
-
-        if ($isBorrowed) {
+        if ($barangInventaris->status_dipinjam) {
             return response()->json(['error' => 'Barang masih dipinjam.'], 409);
         }
 

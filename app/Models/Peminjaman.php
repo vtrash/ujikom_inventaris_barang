@@ -42,7 +42,10 @@ class Peminjaman extends Model
     public static function generateId()
     {
         $startId = 1;
-        $latestData = Peminjaman::orderByDesc('id')->first();
+        $latestData = Peminjaman
+            ::orderByDesc('id')
+            ->lockForUpdate()
+            ->first();
 
         if ($latestData) {
             $isNewDate = date('Y-m') > date('Y-m', strtotime($latestData->tgl_peminjaman));

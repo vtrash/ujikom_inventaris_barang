@@ -16,9 +16,11 @@ class PengembalianSeeder extends Seeder
     {
         $detailPeminjamanIds = DetailPeminjaman::get()->pluck('id');
 
-        foreach ($detailPeminjamanIds as $detailPeminjamanId) {
+        $pengembalianIds = Pengembalian::generateId(count($detailPeminjamanIds));
+
+        foreach ($detailPeminjamanIds as $index => $detailPeminjamanId) {
             Pengembalian::create([
-                'id' => Pengembalian::generateId(),
+                'id' => $pengembalianIds[$index],
                 'detail_peminjaman_id' => $detailPeminjamanId,
                 'status_pengembalian' => '0',
             ]);

@@ -34,10 +34,13 @@ class Pengembalian extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public static function generateId()
+    public static function generateId(int $itemLength)
     {
         $startId = 1;
-        $latestData = Pengembalian::orderByDesc('id')->first();
+        $latestData = Pengembalian
+            ::orderByDesc('id')
+            ->lockForUpdate()
+            ->first();
 
         if ($latestData) {
             $isNewDate = date('Y-m') > date('Y-m', strtotime(substr($latestData['id'], 2, 6) . '01'));
@@ -46,7 +49,11 @@ class Pengembalian extends Model
                 $startId = (int) substr($latestData['id'], strlen('KBYYYYmm')) + 1;
             }
         }
-        
-        return 'KB' . date('Y') . date('m') . str_pad($startId, 5, 0, STR_PAD_LEFT);
+
+        for ($i = 0; $i < $itemLength; $i++) {
+            $generatedIds[] = 'KB' . date('Y') . date('m') . str_pad($startId + $i, 5, 0, STR_PAD_LEFT);
+        }
+     
+        return $generatedIds;
     }
 }

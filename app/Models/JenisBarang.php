@@ -28,7 +28,10 @@ class JenisBarang extends Model
     }
     public static function generateId()
     {
-        $latestData = JenisBarang::orderByDesc('kode_jenis_barang')->first();
+        $latestData = JenisBarang
+            ::orderByDesc('kode_jenis_barang')
+            ->lockForUpdate()
+            ->first();
 
         $startId = $latestData ? (int) substr($latestData['kode_jenis_barang'], 2) + 1 : 1;
 

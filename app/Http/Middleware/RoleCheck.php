@@ -16,9 +16,7 @@ class RoleCheck
      */
     public function handle(Request $request, Closure $next, ... $roles): Response
     {
-        $user = Auth::user();
-
-        if (in_array($user->role ?? null, $roles)) {
+        if (in_array(Auth::user()->role ?? null, $roles)) {
             return $next($request);
         }
 
